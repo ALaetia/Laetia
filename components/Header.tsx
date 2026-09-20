@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import CartLink from './CartLink';
 
-export default function Header({ categories, user, storeName }: { categories: any[]; user: any; storeName: string }) {
+export default function Header({ categories, user, storeName, logoUrl }: { categories: any[]; user: any; storeName: string; logoUrl?: string }) {
   return (
     <header className="header">
       <div className="container header-in">
-        <Link href="/" className="brand">{storeName}</Link>
+        <Link href="/" className="brand" aria-label={storeName}>{logoUrl ? <img src={logoUrl} alt={storeName} /> : storeName}</Link>
         <form action="/busca" className="search" role="search">
           <input name="q" type="search" placeholder="Buscar terços e outros itens" aria-label="Buscar" />
         </form>

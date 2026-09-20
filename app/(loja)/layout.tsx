@@ -20,7 +20,7 @@ export default async function LojaLayout({ children }: { children: React.ReactNo
 
   return (
     <CartProvider>
-      <Header categories={categories || []} user={user} storeName={s.storeName} />
+      <Header categories={categories || []} user={user} storeName={s.storeName} logoUrl={s.logoUrl} />
       <main>{children}</main>
       <footer className="footer">
         <div className="container footer-in">

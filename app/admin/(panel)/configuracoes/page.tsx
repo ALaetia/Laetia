@@ -1,15 +1,21 @@
 import { getPublicSettings, getPrivateSettings } from '@/lib/settings';
 import { saveSettings } from '../../actions';
 
-export default async function Config({ searchParams }: { searchParams: Promise<{ salvo?: string }> }) {
-  const { salvo } = await searchParams;
+export default async function Config({ searchParams }: { searchParams: Promise<{ salvo?: string; erro?: string }> }) {
+  const { salvo, erro } = await searchParams;
   const [p, { sender: s }] = await Promise.all([getPublicSettings(), getPrivateSettings()]);
   return (
     <>
       <h1>Configurações</h1>
       {salvo && <div className="notice ok">Configurações salvas.</div>}
-      <form action={saveSettings} className="stack">
+      {erro && <div className="notice err">{erro}</div>}
+      <form action={saveSettings} encType="multipart/form-data" className="stack">
         <section className="panel">
+          <h2>Logo</h2>
+          <p className="muted small">Aparece no topo da loja. Use PNG com fundo transparente (ideal: pelo menos 400 px de largura), até 2 MB. Sem logo, aparece o nome da loja em texto.</p>
+          {p.logoUrl && <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 8, padding: '1rem', marginBottom: '1rem', display: 'inline-block' }}><img src={p.logoUrl} alt="Logo atual" style={{ height: 48, width: 'auto' }} /></div>}
+          <div className="field"><label htmlFor="lg">{p.logoUrl ? 'Trocar logo' : 'Enviar logo'}</label><input id="lg" type="file" name="logo" accept="image/png,image/jpeg,image/webp" /></div>
+          {p.logoUrl && <label className="check" style={{ marginBottom: '1.5rem' }}><input type="checkbox" name="removeLogo" /> Remover a logo atual</label>}
           <h2>Loja</h2>
           <div className="form-grid">
             <div className="field c3"><label htmlFor="a">Nome da loja</label><input id="a" name="storeName" defaultValue={p.storeName} /></div>

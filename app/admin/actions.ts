@@ -167,8 +167,25 @@ export async function saveSettings(fd: FormData) {
   await requireAdmin();
   const s = (k: string) => String(fd.get(k) || '').trim();
   const db = supabaseAdmin();
+  const { getPublicSettings } = await import('@/lib/settings');
+  const cur = await getPublicSettings();
+
+  // logo: mantém a atual, troca se enviarem outra, remove se marcarem
+  let logoUrl = cur.logoUrl || '';
+  if (fd.get('removeLogo') === 'on') logoUrl = '';
+  const f = fd.get('logo');
+  if (f instanceof File && f.size) {
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type) || f.size > 2 * 1024 * 1024) {
+      redirect('/admin/configuracoes?erro=' + encodeURIComponent('Logo: use PNG, JPG ou WebP de até 2 MB.'));
+    }
+    const path = `brand/logo-${Date.now()}.${f.type.split('/')[1].replace('jpeg', 'jpg')}`;
+    const { error } = await db.storage.from('products').upload(path, Buffer.from(await f.arrayBuffer()), { contentType: f.type });
+    if (error) redirect('/admin/configuracoes?erro=' + encodeURIComponent('Não foi possível enviar a logo.'));
+    logoUrl = db.storage.from('products').getPublicUrl(path).data.publicUrl;
+  }
+
   await db.from('settings').upsert({ key: 'public', value: {
-    storeName: s('storeName') || 'Laetia', whatsapp: s('whatsapp'), whatsappMessage: s('whatsappMessage'),
+    storeName: s('storeName') || 'Laetia', logoUrl, whatsapp: s('whatsapp'), whatsappMessage: s('whatsappMessage'),
     homeTitle: s('homeTitle'), homeSubtitle: s('homeSubtitle'),
     shippingFallback: num(fd.get('shippingFallback')), freeShippingAbove: num(fd.get('freeShippingAbove')),
   } });

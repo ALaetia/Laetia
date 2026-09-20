@@ -41,6 +41,7 @@ p { margin: 0 0 1rem; }
 .header-in { display: flex; align-items: center; gap: 1rem; padding-block: .75rem; }
 .brand { font-family: var(--serif); font-size: 1.6rem; color: var(--ink); letter-spacing: .02em; }
 .brand:hover { text-decoration: none; }
+.brand img { display: block; height: 38px; width: auto; max-width: 200px; object-fit: contain; }
 .search { flex: 1; max-width: 420px; margin-left: auto; }
 .search input { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: .5rem 1rem; font: inherit; }
 .head-links { display: flex; gap: 1rem; align-items: center; margin-left: auto; }

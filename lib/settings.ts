@@ -3,6 +3,7 @@ import { supabaseAdmin } from './supabase/admin';
 
 export const DEFAULT_PUBLIC = {
   storeName: 'Laetia',
+  logoUrl: '',
   whatsapp: '',
   whatsappMessage: 'Olá! Gostaria de tirar uma dúvida sobre a Laetia.',
   homeTitle: 'Terços e artigos para a sua oração',

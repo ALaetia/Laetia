@@ -6,6 +6,4 @@
   NODE_VERSION = "20"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs"git add netlify.toml
-git commit -m "Define publish como .next"
-git push
+  package = "@netlify/plugin-nextjs"
